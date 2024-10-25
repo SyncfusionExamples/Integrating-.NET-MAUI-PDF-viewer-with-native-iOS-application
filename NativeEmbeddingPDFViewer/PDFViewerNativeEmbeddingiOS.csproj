@@ -17,9 +17,10 @@
     <PackageReference Include="Syncfusion.Maui.PdfViewer" Version="26.1.42" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Assets\PDF_Succinctly.pdf" />
     <None Remove="pdfSuc 1.pdf" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="pdfSuc_1.pdf" />
+    <EmbeddedResource Include="Assets\PDF_Succinctly.pdf" />
   </ItemGroup>
 </Project>

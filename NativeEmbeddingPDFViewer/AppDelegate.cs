@@ -34,7 +34,7 @@ public class AppDelegate : UIApplicationDelegate {
         pdfViewer.Background = Colors.White;
         // Load a PDF document
         var assembly = Assembly.GetExecutingAssembly();
-        pdfViewer.DocumentSource = this.GetType().Assembly.GetManifestResourceStream("PDFViewerNativeEmbeddingiOS.pdfSuc_1.pdf");           
+        pdfViewer.DocumentSource = this.GetType().Assembly.GetManifestResourceStream("PDFViewerNativeEmbeddingiOS.Assets.PDF_Succinctly.pdf");           
         // Convert the .NET MAUI control to an iOS View object
         UIView mauiView = pdfViewer.ToPlatform(_mauiContext); mauiView.Frame = Window!.Frame;
         // Create UIViewController and add the PDF Viewer to its subviews
