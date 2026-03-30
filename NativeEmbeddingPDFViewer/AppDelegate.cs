@@ -1,5 +1,5 @@
 ﻿using Foundation;
-using Microsoft.Maui.Embedding;
+using Microsoft.Maui.Controls.Embedding;
 using Microsoft.Maui.Platform;
 using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.PdfViewer;
@@ -18,15 +18,26 @@ public class AppDelegate : UIApplicationDelegate {
 		set;
 	}
 
-	public override bool FinishedLaunching (UIApplication application, NSDictionary launchOptions)
+	public override bool FinishedLaunching (UIApplication application, NSDictionary? launchOptions)
 	{
-        // create a new window instance based on the screen size
-        Window = new UIWindow(UIScreen.MainScreen.Bounds);
+        //creates and displays the main iOS application window using the active scene
+        UIWindowScene? windowScene = application
+               .ConnectedScenes
+               .OfType<UIWindowScene>()
+               .FirstOrDefault();
+
+        if (windowScene != null)
+        {
+            Window = new UIWindow(windowScene);
+            Window.RootViewController = new UIViewController();
+            Window.MakeKeyAndVisible();
+        }
         MauiAppBuilder builder = MauiApp.CreateBuilder();
-        builder.UseMauiEmbedding<Microsoft.Maui.Controls.Application>();
+        builder.UseMauiEmbeddedApp<Microsoft.Maui.Controls.Application>();
         builder.ConfigureSyncfusionCore();
         // Register the Window.
-        builder.Services.Add(new Microsoft.Extensions.DependencyInjection.ServiceDescriptor(typeof(UIWindow), Window));
+        if(Window != null)
+            builder.Services.Add(new Microsoft.Extensions.DependencyInjection.ServiceDescriptor(typeof(UIWindow), Window));
         MauiApp mauiApp = builder.Build();
         _mauiContext =new MauiContext(mauiApp.Services);
         // Create the PDF Viewer
