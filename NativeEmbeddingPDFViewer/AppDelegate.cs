@@ -20,18 +20,19 @@ public class AppDelegate : UIApplicationDelegate {
 
 	public override bool FinishedLaunching (UIApplication application, NSDictionary? launchOptions)
 	{
-        //creates and displays the main iOS application window using the active scene
-        UIWindowScene? windowScene = application
-               .ConnectedScenes
-               .OfType<UIWindowScene>()
-               .FirstOrDefault();
-
-        if (windowScene != null)
-        {
-            Window = new UIWindow(windowScene);
-            Window.RootViewController = new UIViewController();
-            Window.MakeKeyAndVisible();
-        }
+        //creates and displays the main iOS application window using the foreground-active UIWindowScene
+        UIWindowScene? windowScene = application.ConnectedScenes
+            .OfType<UIWindowScene>()
+            .FirstOrDefault(scene =>
+                scene.ActivationState == UISceneActivationState.ForegroundActive)
+            ?? application.ConnectedScenes
+                .OfType<UIWindowScene>()
+                .FirstOrDefault();
+        if (windowScene == null)        
+            return false;        
+        Window = new UIWindow(windowScene);
+        Window.RootViewController = new UIViewController();
+        Window.MakeKeyAndVisible();
         MauiAppBuilder builder = MauiApp.CreateBuilder();
         builder.UseMauiEmbeddedApp<Microsoft.Maui.Controls.Application>();
         builder.ConfigureSyncfusionCore();
