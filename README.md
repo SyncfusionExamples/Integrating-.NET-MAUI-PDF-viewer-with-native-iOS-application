@@ -11,26 +11,36 @@ In the project file of the native application, add `<UseMaui>`true  `<UseMaui>` 
  
  ```xml
 <PropertyGroup>
-  <TargetFramework>net8.0-ios</TargetFramework>
+  <TargetFramework>net10.0-ios</TargetFramework>
   <OutputType>Exe</OutputType>
   <Nullable>enable</Nullable>
   <UseMaui>true</UseMaui>
   <ImplicitUsings>enable</ImplicitUsings>
-  <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
+  <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
 </PropertyGroup> 
  ```
 
 **Step 3:**
 
-To initialize .NET MAUI in a native app, create a MauiAppBuilder object and invoke **UseMauiEmbedding ()** to enable embedding. Then, configure it to setup **SyncfusionCore** component within your .NET native app project.
+To initialize .NET MAUI in a native app, create a MauiAppBuilder object and invoke **UseMauiEmbeddedApp ()** to enable embedding. Then, configure it to setup **SyncfusionCore** component within your .NET native app project.
 
 Then, create a MauiApp object by invoking the Build() method on the MauiAppBuilder object. In addition, a MauiContext object should be made from the MauiApp object. The MauiContext object will be used when converting .NET MAUI controls to native types.
  
  ```csharp
 public override bool FinishedLaunching (UIApplication application, NSDictionary launchOptions)
  {
-      // create a new window instance based on the screen size
-      Window = new UIWindow(UIScreen.MainScreen.Bounds);
+      // create a new window instance based on the active scene
+      UIWindowScene? windowScene = application
+       .ConnectedScenes
+       .OfType<UIWindowScene>()
+       .FirstOrDefault();
+
+      if (windowScene != null)
+      {
+          Window = new UIWindow(windowScene);
+          Window.RootViewController = new UIViewController();
+          Window.MakeKeyAndVisible();
+      }
       MauiAppBuilder builder = MauiApp.CreateBuilder();
       builder.UseMauiEmbedding<Microsoft.Maui.Controls.Application>();
       builder.ConfigureSyncfusionCore();
